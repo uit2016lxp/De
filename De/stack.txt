@@ -1,0 +1,111 @@
+#define zengjia 10;      //增加的栈的数量
+#define stack_init_size 100;//初始的栈分配的空间量
+#include<stdio.h>
+#include<malloc.h>
+#include<string.h>
+#include<stdlib.h>
+#include<iostream>
+
+using namespace std;
+typedef int selemtype;    //把int换一个名字，以便后面能把int转化成任意类型
+
+
+typedef struct
+{
+	selemtype *top;//栈顶指针
+	selemtype *base;//栈低指针
+	int stacksize; //已经分配的空间
+ }NODE;
+
+void chu_shi_hua(NODE &L)//栈初始化
+{
+	L.base = (selemtype*)malloc(sizeof(selemtype)*100);   //初始化栈
+	if (L.base == NULL)
+	{
+		cout << "栈分配内存失败！";
+	}
+	L.top = L.base;
+	L.stacksize = stack_init_size;
+}
+
+void jin_zhan(NODE &L, int x)  //进栈
+{
+	if (L.top - L.base > L.stacksize)//判断栈内存够不够用
+	{
+		L.base = (int*)realloc(L.base, 110 * sizeof(int));//在原有的100个int类型的地址上在加10个
+		if (L.base == NULL)
+		{
+			cout << "内存分配失败";
+			exit(0);
+		}
+		L.top = L.base+100;
+		L.stacksize += zengjia;
+	}
+	*(L.top)++ = x; //存完数组跳往下一个地址
+}
+
+
+void display(NODE &L)//查看栈中元素
+{
+	int *q = L.top-1;
+	cout << "栈中元素是：" << endl;
+	while (q != L.base)
+	{
+		cout << *q<<" ";
+		q--;
+	}
+	cout << *q<<endl;
+}
+
+
+
+void chu_zhan(NODE &L)
+{
+	if (L.base == L.top)
+	{
+		cout << "栈为空！"<<endl;
+		exit(0);
+	}
+	else
+		L.top--;
+}
+void chazhao(NODE &L, int x)//查找数字
+{
+	int j=0;//用于确定输入的数列在第几行
+	while (L.base != L.top)
+	{
+		if (x == (*L.top))
+			break;
+		else
+			L.top--;
+		j++;
+	}
+	if (j == 0)
+		cout << "没查到此数据"<<endl;
+	else
+		cout << "该数据在第" << j<< endl;
+}
+
+
+
+
+int main()
+{
+	NODE a;
+	chu_shi_hua(a);//初始化栈
+	jin_zhan(a, 30);
+	jin_zhan(a, 40);
+	jin_zhan(a, 50);
+	jin_zhan(a, 60);
+	jin_zhan(a, 70); 
+	jin_zhan(a, 80);
+	display(a);
+	cout << "出栈";
+	chu_zhan(a);
+	chu_zhan(a);
+	chu_zhan(a);
+	display(a);
+	chazhao(a, 20);
+	chazhao(a, 50);
+	system("pause");
+}
