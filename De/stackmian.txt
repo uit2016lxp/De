@@ -1,0 +1,91 @@
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+typedef int  everytype ;//可修改类型
+
+
+class stack //栈类
+{
+public:
+	void Stack();    //栈的初始化
+	~stack();   //析构栈
+	void add_stack(everytype);   //栈的添加
+	void display();    //栈的查找
+	void chu_zhan();    //出栈
+private:
+typedef	struct 
+	{
+	everytype *top;//栈顶
+	everytype *base;//栈底
+	int a; //用于存储分配空间
+	}NODE;
+NODE L;
+};
+
+
+void stack::Stack()//初始化
+{
+	L.base = (everytype*)malloc(100 * sizeof(int));
+	if (L.base == NULL)
+	{
+		cout << "申请内存失败!"<<endl;
+		exit(0);
+	}
+	L.top = L.base;
+	L.a = 100;
+}
+stack::~stack()//析构
+{
+	cout << "谢谢使用！"<<endl;
+}
+
+void stack::add_stack(everytype xx)//进栈
+{
+	if (L.top - L.base >= L.a)//判断是否栈满
+	{
+		L.base = (int*)realloc(L.base, 110 * sizeof(int));//扩充栈
+		if (L.base == NULL)
+		{
+			cout << "内存申请失败！";
+			exit(0);
+		}
+		L.top = L.base + 100;
+		L.a += 10;
+	}
+	*(L.top)++ = xx;
+}
+void stack::display()
+{
+	int *i;
+	i = L.top;
+	for (L.top; L.top > L.base; L.top--)
+		cout << *(L.top-1)<<"  ";
+	cout << endl;
+	L.top = i;
+}
+
+
+void stack::chu_zhan()
+{
+	if ( L.top== L.base)
+	{
+		cout << "此栈为空！";
+	}
+	else
+	(L.top)--;
+}
+int main()
+{
+	stack a;
+	a.Stack();
+	a.add_stack(5);
+	a.add_stack(6);
+	a.add_stack(7);
+	a.add_stack(8);
+	a.add_stack(9);
+	a.add_stack(10);
+	a.display();
+	a.chu_zhan();
+	a.display();
+	system("pause");
+}
