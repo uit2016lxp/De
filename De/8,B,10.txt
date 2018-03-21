@@ -1,0 +1,27 @@
+#include<stdio.h>
+int main()
+{
+	int a, b, c,d[100000],e,f=0;
+	scanf("%d %d", &a, &b);
+	for (c = 0; c < a; c++)
+	{
+		scanf("%d", &d[c]);
+	}
+	for (c = 0; c < a-1; c++)
+	{
+		for (e = c+1; e < a; e++)
+		{
+			d[c] += d[e];
+			if (d[c] % b == 0)
+				f++;
+		}
+	}
+	for(c=0;c<a;c++)
+	{
+		if(d[c]%b==0)
+			f++;
+	}
+	printf("%d", f);
+	return 0;
+	
+}
