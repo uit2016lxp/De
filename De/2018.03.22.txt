@@ -1,0 +1,143 @@
+#include<stdio.h>
+#include<iostream>
+using namespace std;
+typedef struct xx
+{
+	int number;
+	int price;
+	double one_price;
+	struct xx *next;
+}Node, *NODE;
+
+void createlist(NODE L,int a)
+{
+	NODE p;
+	NODE q;
+	int c=0;
+	p = (NODE)malloc(sizeof(xx));
+	L->next = p;
+	printf("请输入产品量");
+	cin>>p->number;
+	printf("请输入产品售卖总量");
+	cin >> p->price;
+	p->one_price = (p->price /1./ p->number);
+	while (c<a-1)
+	{
+		q = (NODE)malloc(sizeof(xx));
+		p->next = q;
+		p = q;
+		printf("请输入产品量");
+		cin >> p->number;
+		printf("请输入产品售卖总量");
+		cin >> p->price;
+		p->one_price = (  p->price /1./ p->number);
+		p->next = NULL;
+		c++;
+	}
+}
+
+
+
+
+
+
+
+NODE headlist()
+{
+
+	NODE L = (NODE)malloc(sizeof(Node));
+	if (L == NULL)
+	{
+		printf("内存分配失败");
+		return NULL;
+	}
+	L->next = NULL;
+	return L;
+}
+void paixu(NODE L)//排序
+{
+	int i, j;
+
+	int number1=0;
+	int price1=0;
+	double one_price1=0;
+	int count=0;
+	NODE q = L;
+	while (q->next != NULL)
+	{
+		count++;
+		q = q->next;
+	}
+	cout << count << endl;
+	for (i = 0; i < count-1 ; i++)
+	{
+		q = L->next;
+		for (j = 0; j < i ; j++)
+		{
+			if (q->one_price< q->next->one_price)
+			{
+				one_price1 = q->one_price;
+				number1 = q->number;
+				price1 = q->price;
+
+				q->number = q->next->number;
+				q->price = q->next->price;
+				q->one_price = q->next->one_price;
+
+				q->next->number = number1;
+				q->next->price = price1;
+				q->next->one_price = one_price1;
+			}
+			q = q->next;
+		}
+	}
+}
+
+
+
+void printflist(NODE L)
+{
+	NODE z;
+	z = L->next;
+	cout << "数量	总价	单价" << endl;
+	while (z!= NULL)
+	{
+		cout << z->number <<"	"<< z->price << "	" << z->one_price<<endl;
+		z = z->next;
+	}
+	printf("\n");
+}
+void panding(NODE L,int X)
+{
+	NODE q;
+	q = L->next;
+	int i;
+	double z=0;
+	while (X >q->number)
+	{
+
+			X = X - q->number;
+			z += double(q->price);
+			q = q->next;
+	}
+	z +=(X*(q->one_price));
+	printf("%.2lf", z);
+
+}
+
+int main()
+{
+	int a;//用于存储多少种类月饼
+	int b;//用于存储需求量
+	NODE L= headlist();
+	
+	cout << "请输入月饼种类数，需求量！"<<endl;
+	cin >> a;
+	cin >> b;
+	createlist(L, a);
+	printflist(L);
+	paixu(L);
+	printflist(L);
+	panding(L, b);
+	system("pause");
+}
