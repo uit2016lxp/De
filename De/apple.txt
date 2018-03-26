@@ -1,0 +1,32 @@
+
+#include<stdio.h>
+int main()
+{
+	int a;//用于存买苹果的数据
+	int c, d，e，f;
+	int z[20] = { 0 };
+	int i = 0;
+	cin >> a;
+	if (a % 2 == 1)
+		cout << "-1"<<endl;
+	else
+		for(c=0;c<15;c++)
+			for(d=0;d<15;d++)
+				if (c * 8 + d * 6 == a)
+				{
+					z[i] = c;
+					i++;
+				}
+	for (c = 0; c<i; c++)
+		if (z[0]<z[c])
+			z[0] = z[c];
+       e=z[0];
+       f=(a-z[0]*8)/6;
+
+
+
+	printf("%d",e+f);
+	
+
+
+}

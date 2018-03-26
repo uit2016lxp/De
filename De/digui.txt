@@ -1,0 +1,28 @@
+
+
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+
+void erfenfa(vector<int> &v,int l,int r,int n){
+    int mid=(l+r)/2;
+    
+    if(r<=l){//特殊情况时，r<l而不是等于
+        if(v[l]==n)   return;
+        if(v[l]<n)    v.insert(v.begin()+l+1,n);
+        if(v[l]>n)    v.insert(v.begin()+l,n);
+        return ;
+    }
+    if(v[mid]==n)   return;
+    else if(v[mid]>n)    erfenfa(v,l,mid-1,n);
+    else    erfenfa(v, mid+1, r, n);
+}
+int main(){
+    vector<int> v={10,2,4,8,6};//杂乱的数组
+    sort(v.begin(),v.end());
+    
+    vector<int>range={1,0,3,5,7,9};//插入的范围
+    for(auto a:range)   erfenfa(v,0,v.size()-1,a);
+    for(auto a:v)   cout<<a<<" ";
+}
