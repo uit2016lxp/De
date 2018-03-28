@@ -1,0 +1,150 @@
+// ConsoleApplication42.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"stdio.h"
+#include"string.h"
+#include"stdlib.h"
+
+
+int main()
+{
+	int i, j, k = 0;
+	int a[30], b[30], c[30];//学号，德分，才分
+	int temp;
+	int temp1;
+	int temp2;
+	int z;//总人数
+	int L, H;//入取最低分  优先入取分
+	scanf_s("%d %d %d ", &z, &L, &H);
+
+	for (i = 0; i < z; i++)
+		scanf_s("%d %d %d", &a[i], &b[i], &c[i]);
+	//先对总分进行排序
+	for (i = 0; i < z ; i++)
+	{
+		for (j = 0; j < z ; j++)
+		{
+			if ((c[j] + b[j]) < (c[j + 1] + b[j + 1]))
+			{
+				temp = a[j];
+				a[j] = a[j + 1];
+				a[j + 1] = temp;
+
+				temp1 = b[j];
+				b[j] = b[j + 1];
+				b[j + 1] = temp1;
+
+				temp2 = c[j];
+				c[j] = c[j + 1];
+				c[j + 1] = temp2;
+			}
+       }
+	}
+	
+
+	//如果总分相同的话，按德分排序
+	for (i = 0; i < z; i++)
+	{
+		if (b[i] < b[i + 1] && (b[i] + c[i]) == (b[i + 1] + c[i + 1]))
+		{
+			temp = a[i];
+			a[i] = a[i + 1];
+			a[i + 1] = temp;
+
+			temp1 = b[i];
+			b[i] = b[i + 1];
+			b[i + 1] = temp1;
+
+			temp2 = c[i];
+			c[i] = c[i + 1];
+			c[i + 1] = temp2;
+		}
+	}
+
+	//如果总分和德分相同的话，按学号序号排序
+	for (i = 0; i < z; i++)
+		if (b[i] == b[i + 1] && (b[i] + c[i]) == (b[i + 1] + c[i + 1]) && a[i]>a[i + 1])
+		{
+			temp = a[i];
+			a[i] = a[i + 1];
+			a[i + 1] = temp;
+
+			temp1 = b[i];
+			b[i] = b[i + 1];
+			b[i + 1] = temp1;
+
+			temp2 = c[i];
+			c[i] = c[i + 1];
+			c[i + 1] = temp2;
+		}
+	for (i = 0; i < z; i++)
+	{
+		if (b[i] < L||c[i] < L)
+		{
+			k++;
+		}
+	}
+
+
+	printf_s("输出\n");
+	printf_s("%d\n", z - k);
+
+	//输出德才兼备者
+
+	for (i = 0; i < z; i++)
+	{
+		if (b[i] >= H&&c[i] >= H)
+		{
+			printf_s("%d %d %d\n", a[i], b[i], c[i]);
+			a[i] = 0;
+			b[i] = 0;
+			c[i] = 0;
+		}
+	}
+
+	//输出德胜才
+	for (i = 0; i < z; i++)
+	{
+		if (b[i] >= H&&c[i] < H&&c[i] >= L)
+		{
+			printf_s("%d %d %d\n", a[i], b[i], c[i]);
+			a[i] = 0;
+			b[i] = 0;
+			c[i] = 0;
+		}
+	}
+	
+	//输出才德将亡
+	for (i = 0; i < z; i++)
+	{
+		if (b[i]<H&&c[i]<H&&b[i]>=L&&c[i]>=L&&b[i]>c[i])
+		{
+			printf_s("%d %d %d\n ", a[i], b[i], c[i]);
+			a[i] = 0;
+			b[i] = 0;
+			c[i] = 0;
+		}
+	}
+	
+	//输出最后一类
+	for (i = 0; i < z; i++)
+	{
+		if (b[i] >= L&&b[i]<H&&c[i] >= L)
+		{
+			printf_s("%d %d %d\n", a[i], b[i], c[i]);
+			a[i] = 0;
+			b[i] = 0;
+			c[i] = 0;
+		}
+	}
+
+
+	system("pause");
+
+	return 0;
+}
+
+
+
+

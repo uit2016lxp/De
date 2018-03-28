@@ -1,0 +1,45 @@
+// 学生成绩.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"stdio.h"
+#include"iostream"
+using namespace std;
+
+
+int main()
+{
+	int i, n;
+	char name[1000][20];
+	char num[1000][20];
+	int grade[1000];
+	int max = 0;
+	int min = 100;
+	int m = 0;
+	int j = 0;
+	cin >> n;
+	
+	for (i = 0; i < n; i++)
+	{
+		cin >> name[i] >> num[i] >> grade[i];
+		
+	}
+	for (i = 0; i < n; i++)
+	{
+		if (grade[i] > max)
+		{
+			max = grade[i];
+			m = i;
+		}
+		 if (grade[i] <min)
+		{
+			min = grade[i];
+			j = i;
+		}
+	}
+	cout << name[m] << "  " << num[m] << endl;
+	cout << name[j] << "  " << num[j] << endl;
+
+	return 0;
+}
+
