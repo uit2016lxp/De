@@ -1,0 +1,137 @@
+// 队列.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"stdio.h"
+#include"stdlib.h"
+
+struct Node
+{
+	int data;
+	struct Node *next;
+};
+struct queue
+{
+	struct Node *frant;
+	struct Node *fear;
+};
+void initqueue(struct queue *fq)
+{
+	fq->frant = fq->fear = NULL;
+	
+}
+//入队
+void inqueue(struct queue *fq, int x)
+{
+	struct Node *p = (struct Node *)malloc(sizeof(struct Node));
+	if (p == NULL)
+	{
+		printf("储存失败");
+		exit(1);
+	}
+	p->data = x;
+	p->next = NULL;
+	if (fq->fear == NULL)
+	{
+		fq->frant = fq->fear = p;
+
+     }
+	else
+	{
+		fq->fear = fq->fear->next=p;
+	}
+	return;
+}
+//删除队列元素
+int delqueue(struct queue *fq)
+{
+	struct Node *p;
+	int temp;
+	if (fq->frant == NULL)
+	{
+		printf("队列为空，无法删除！");
+		exit(1);
+     }
+	temp = fq->frant->data;
+	p = fq->frant;
+	fq->frant = p->next;
+
+	if (fq->frant == NULL)
+	{
+		fq->fear = NULL;
+	}
+	free(p);
+	return temp;
+}
+//读取头元素
+int peekqueue(struct queue *fq)
+{
+	if (fq->frant == NULL)
+	{
+		printf("队列为空，无法读取！");
+		exit(1);
+	}
+	return fq->frant->data;
+}
+//检查链队是否为空
+int emptyqueue(struct queue * fq)
+{
+	if (fq->frant ==NULL)
+		return 1;
+	else
+		return 0;
+}
+
+void clearqueue(struct queue *fq)
+{
+	struct Node *p = fq->frant;
+	while (p != NULL)
+	{
+		fq->frant = fq->frant->next;
+		free(p);
+		p = fq->frant;
+    }
+	fq->fear = NULL;
+	return;
+}
+int main()
+{
+	struct queue q;
+	int a[8] = { 3,8,5,17,9,30,15,22 };
+	int i;
+	initqueue(&q);
+	for (i = 0; i<8; i++)
+	{
+		inqueue(&q, a[i]);
+	}
+	printf("delnode is %d\n", delqueue(&q));
+	printf("delnode is %d\n", delqueue(&q));
+	inqueue(&q, 68);
+	printf("peeknode is %d\n", peekqueue(&q));
+
+	while (!emptyqueue(&q))
+	{
+		printf("%d\n", delqueue(&q));
+	}
+	clearqueue(&q);
+	system("pause");
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
