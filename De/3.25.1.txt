@@ -1,0 +1,136 @@
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+class xianxing {
+public:
+	 void in(int) ;
+	 void out();
+};//线性虚基类
+class shunxu :virtual public xianxing {
+public:
+	 void in();
+private:
+	int n[20];
+};//顺序虚基类
+class lianshi :virtual public xianxing {
+};//链式继承线性
+class zhan :virtual public xianxing{
+public:
+	void Zhan();
+	void in(int);
+	void out();
+private:
+	typedef struct XXx
+	{
+		int a;
+		XXx *next;
+	}*XXX;
+	XXX n;
+};//栈继承链式
+void zhan::Zhan()
+{
+	n = (XXX)malloc(sizeof(XXx));
+	if (n == NULL)
+	{
+		cout << "内存分配失败";
+		exit(0);
+	}
+	n->next = NULL;
+}//定义栈
+void zhan::in(int a)
+{
+	XXX p = (XXX)malloc(sizeof(XXx));
+	p->a = a;
+	p->next = n->next;
+	n->next = p;
+}//栈输入
+void zhan::out()
+{
+	XXX q;
+	q = n->next;
+	while (q != NULL)
+	{
+		cout << q->a << " ";
+		q = q->next;
+	}
+	cout << endl;
+}//栈输出
+class dui :virtual public xianxing
+{
+public:
+	virtual void Dui();
+	virtual void in(int);
+	virtual void out();
+private:
+	typedef struct XXx
+	{
+		int a;
+		XXx *next;
+	}*XXX;
+	XXX n;
+};//队列继承链式
+void dui::Dui()
+{
+	n = (XXX)malloc(sizeof(XXx));
+	if (n == NULL)
+	{
+		cout << "内存分配失败";
+		exit(0);
+	}
+	n->next = NULL;
+}//定义队列
+void dui::in(int b)
+{
+	int a;
+	cin >> a;
+	XXX t;
+	XXX y;
+	t = (XXX)malloc(sizeof(XXx));
+	n->next = t;
+	t->a = a;
+	b = b - 1;
+	while (b != 0)
+	{
+		y = (XXX)malloc(sizeof(XXx));
+		t->next = y;
+		t = y;
+		cin >> t->a;
+		t->next = NULL;
+		b--;
+	}
+}//队列输入
+void dui::out()
+{
+	XXX L;
+	L = n->next;
+	while (L->next != NULL)
+	{
+		cout << L->a << " ";
+		L = L->next;
+	}
+	cout << L->a << " ";
+	cout << endl;
+
+}//队列输出
+
+int main()
+{
+	int u;
+	zhan n;
+	cout << "栈" << endl;
+	n.Zhan();
+	n.in(23);
+	n.in(24);
+	n.in(25);
+	n.in(26);
+	n.in(27);
+	n.out();
+	cout << "队列，你想输入几个数：" << endl;
+	dui o;
+	cin >> u;
+	cout << "请输入" << u << "个数" << endl;
+	o.Dui();
+	o.in(u);
+	o.out();
+	system("pause");
+}
