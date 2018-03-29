@@ -1,0 +1,35 @@
+#include<iostream>
+using namespace std;
+#include<stdio.h>
+int main()
+{
+	char a[20][200];//用来储存人名
+	int b[20];//用来储存分数
+	char z[20][20];
+	int i;
+	int j;
+	int k=0;
+	int m=0;
+	
+	cin >> i;
+	for (j = 0; j < i; j++)
+		cin >>z[j]>> a[j] >> b[j];
+	int max=b[0], min=b[0];
+	for (j = 0; j < i; j++)
+	{
+		if (max < b[j])
+		{
+			max = b[j];
+			k = j;
+		}
+		if (min > b[j])
+		{
+			min = b[j];
+			m = j;
+		}
+	}
+	cout <<z[m]<<a[m] << "  " << max << endl;
+	cout <<z[k]<< a[k] << "  " << min << endl;
+
+	system("pause");
+}

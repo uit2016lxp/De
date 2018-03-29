@@ -1,0 +1,131 @@
+#include<stdio.h>
+#include<iostream>
+#include<string.h>
+#include<stdlib.h>
+using namespace std;
+int main()
+{
+	int i;
+	int j,k;
+
+	int a[30];//德分
+	int b[30];//才分
+	int c[30];//学号
+
+	int temp;
+	int temp1;
+	int z;
+	int xx, xxx;//入取最低分  入取最高分
+	cin >> i>>xx>>xxx;
+
+	for (j = 0; j < i; j++)
+		cin >> c[j] >> a[j] >> b[j];
+
+	for(j=0;j<i;j++)//排序
+		for (k = 0; k <i-j; k++)
+		{
+			if ((a[k] + b[k]) < (a[k + 1] + b[k + 1]))
+			{
+				temp = a[k];
+				temp1 = b[k];
+				z = c[k];
+
+				a[k] = a[k + 1];
+				b[k] = b[k + 1];
+				c[k]=c[k + 1];
+
+				a[k + 1] = temp;
+				b[k + 1] = temp1;
+				c[k + 1]=z;
+			}
+		}
+
+									//排序如果总分相同的话
+		for (k = 0; k < i; k++)
+		{
+
+			if (a[k] < a[k + 1] && (a[k] + b[k]) == (a[k + 1] + b[k + 1]))
+			{
+				temp = a[k];
+				temp1 = b[k];
+				z = c[k];
+
+				a[k] = a[k + 1];
+				b[k] = b[k + 1];
+				c[k] = c[k + 1];
+
+				a[k + 1] = temp;
+				b[k + 1] = temp1;
+				c[k + 1] = z;
+			}
+		}
+		//如果总分和得分相同的话
+		for (int asd = 0; asd < i-1; asd++)
+		{
+			if (c[asd] > c[asd + 1] && a[asd] == a[asd + 1] && (a[asd] + b[asd]) == (a[asd + 1] + b[asd + 1]))																							
+			{
+				temp = c[asd];          //如果总分 德分相同学号大的在前面
+				c[asd] = c[asd + 1];
+				c[asd+1] = temp;
+			}
+		}
+
+		int number=0;
+		for (int w = 0; w < i; w++)
+		{
+			if (b[w] >= xx&&a[w] >= xx)
+				number++;
+		}
+		cout << "输出" << endl;
+		cout << number << endl;
+
+	
+
+	for (int w = 0; w < i; w++)//输出德才兼备
+	{
+		if (a[w] >= xxx&&b[w] >= xxx)
+		{
+			cout << c[w] << "  " << a[w] << "  " << b[w] << endl;
+			c[w] = 0;
+			a[w] = 0;
+			b[w] = 0;
+		}
+	}
+
+
+	for (int k = 0; k < i; k++)//德胜才
+	{
+		if (a[k] >= xxx&&b[k] <= xxx&&b[k]>=xx)
+		{
+			cout << c[k] << "  " << a[k] << "  " << b[k] << endl;
+			c[k] = 0;
+			a[k] = 0;
+			b[k] = 0;
+		}
+	}
+
+	for (int k = 0; k < i; k++)//才德將亡
+	{
+		if (a[k] <= xxx&&b[k] <= xxx&&b[k] >= xx&&a[k]>=xx&&a[k]>=b[k])
+		{
+			cout << c[k] << "  " << a[k] << "  " << b[k] << endl;
+			c[k] = 0;
+			a[k] = 0;
+			b[k] = 0;
+		}
+	}
+
+	for (int k = 0; k < i; k++)//最后的
+	{
+		if (a[k] <= xxx&&b[k] >= xx&&a[k] >= xx)
+		{
+			cout << c[k] << "  " << a[k] << "  " << b[k] << endl;
+			c[k] = 0;
+			a[k] = 0;
+			b[k] = 0;
+		}
+	}
+
+
+	system("pause");
+}

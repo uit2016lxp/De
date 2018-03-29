@@ -1,0 +1,185 @@
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+
+//线性虚基类
+
+class xianxing {
+public:
+	virtual void In(int)=0;//函数输入
+	virtual void Out()=0;//函数输出
+};
+
+//顺序虚基类
+
+class shunxu :virtual public xianxing{
+public:
+	virtual void In() = 0;//函数输入
+	virtual void Out() = 0;//函数输出
+private:
+	int a[20];
+};
+
+//链式类
+
+class lianshi:virtual public xianxing
+{
+public:
+	virtual void In(int) = 0;//函数输入
+	virtual void Out() = 0;//函数输出
+	virtual void shanchu() = 0;//函数删除
+};
+
+//栈类
+
+class zhan :virtual public lianshi {
+public:
+	void Zhan();//初始化
+	void In(int);//函数输入
+	void Out();//函数输出
+	void shanchu();//函数删除
+private:
+	typedef struct Node
+	{
+		int x;//用于存储数据
+		Node *next;
+	}*NODE;
+		NODE a;
+};
+
+void zhan::Zhan()
+{
+
+	a = (NODE)malloc(sizeof(Node));
+	if (a == NULL)
+	{
+		printf("内存分配失败");
+		exit(0);
+	}
+	a->next=NULL;
+}
+void zhan::In(int x)
+{
+	NODE q = (NODE)malloc(sizeof(Node));
+	q->x = x;
+	q->next = a->next;
+	a->next = q;
+}
+
+void zhan::Out()
+{
+	NODE L;
+	L = a->next;
+	while (L!=NULL)
+	{
+		cout << L->x << " ";
+		L = L->next;
+	}
+	cout << endl;
+}
+void zhan::shanchu()
+{
+	NODE Q;
+	NODE P;
+	Q = a->next;
+	P = Q;
+	a->next = P->next;
+	free(Q);
+}
+
+
+class dui :virtual public lianshi
+{
+public:
+	virtual void chushi();//初始化
+	virtual void In(int);//函数输入
+	virtual void Out();//函数输出
+	virtual void shanchu();//函数删除
+private:
+	typedef struct Node
+	{
+		int x;//用于存储数据
+		Node *next;
+	}*NODE;
+	NODE a;
+};
+
+void dui::shanchu()
+{
+	NODE Q;
+	NODE P;
+	Q = a->next;
+	P = Q;
+	a->next = P->next;
+	free(Q);
+}
+
+
+
+void dui::In(int x)
+{
+	NODE p;
+	NODE q;
+	p = (NODE)malloc(sizeof(Node));
+	a->next = p;
+	p->x=x;
+	while (p->x!= 0)
+	{
+		q = (NODE)malloc(sizeof(Node));
+		p->next = q;
+		p = q;
+		cin>>p->x;
+		p->next = NULL;
+	}
+
+}
+
+void dui::Out()
+{
+	NODE L;
+	L = a->next;
+	while (L->next != NULL)
+	{
+		cout << L->x << " ";
+		L = L->next;
+	}
+	cout << endl;
+}
+
+void dui::chushi()
+{
+	a = (NODE)malloc(sizeof(Node));
+	if (a == NULL)
+	{
+		printf("内存分配失败");
+		exit(0);
+	}
+	a->next = NULL;
+}
+
+int main()
+{
+	int xx;
+	zhan a;
+	cout << "栈列" << endl;
+	a.Zhan();
+	a.In(6);
+	a.In(55);
+	a.In(43);
+	a.In(7);
+	a.Out();
+	a.shanchu();
+	a.Out();
+	cout << "队列,按0跳出循环" << endl;
+	dui z;
+	cin >> xx;
+	z.chushi();
+	z.In(xx);
+	system("pause");
+	z.Out();
+	z.shanchu();
+	z.shanchu();
+	z.Out();
+	system("pause");
+
+}
