@@ -1,0 +1,143 @@
+// ConsoleApplication3.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+
+
+#include "iostream"
+using namespace std;
+#define M 5
+struct Data
+{
+	int element;
+	Data *next;
+};
+class xian
+{
+public:
+	virtual void stact() = 0;
+	virtual void In() = 0;
+	virtual void out() = 0;
+protected:
+	int len;//长度
+};
+class lian :protected xian
+{
+public:
+	void stact()
+	{
+		len = 0;
+	}
+	virtual void In() = 0;
+	virtual void out() = 0;
+
+};
+class shun :protected xian
+{
+protected:
+	int v[M];
+	int element;
+public:
+	virtual void In() = 0;
+	virtual void out() = 0;
+};
+class dui :protected lian
+{
+protected:
+	Data *frant, *fear;
+public:
+	dui()
+	{
+		frant = NULL;
+		fear = NULL;
+	}
+	virtual void In();
+	virtual void out();
+};
+class zhan :protected lian
+{
+protected:
+	Data *p, *q;
+public:
+	zhan()
+	{
+		p = NULL;
+		q = NULL;
+	}
+	virtual void In();
+	virtual void out();
+};
+void dui::In()
+{
+	stact();
+	Data *e = NULL;
+	do
+	{
+		fear = new Data;
+		cin >> fear->element;
+		if (len == 0)
+		{
+			e = frant = fear;
+		}
+		else
+		{
+			e->next = fear;
+			e = fear;
+		}
+		fear->next = NULL;
+		len++;
+	} while (fear->element != 0);
+}
+void dui::out()
+{
+	Data *r = NULL;
+	while (frant != fear)
+	{
+		r = frant;
+		cout << frant->element << " ";
+		frant = frant->next;
+		delete r;
+		len--;
+	}
+	if (frant == fear)
+		cout << frant->element;
+}
+void zhan::In()
+{
+	stact();
+	do
+	{
+		p = new Data;
+		cin >> p->element;
+		p->next = q;
+		q = p;
+		len++;
+	} while (p->element != 0);
+
+}
+void zhan::out()
+{
+	Data *r;
+	while (q)
+	{
+		r = q;
+		cout << q->element << "  ";
+		q = q->next;
+		delete r;
+		len--;
+	}
+}
+int main()
+{
+	zhan z;
+	cout << "栈:" << endl;
+	z.In();
+	z.out();
+	dui d;
+	cout << endl << "队列:" << endl;
+	d.In();
+	d.out();
+	system("pause");
+
+}
+
