@@ -1,0 +1,129 @@
+#include<iostream>
+#include<stack>
+#include<string>
+using namespace std;
+stack<int>  inta;
+stack<char> charb;
+
+
+string houzhuibiaodashi(string x)//中缀表达式变成后缀
+{
+	string houzhui="";//定义一个空栈
+	for (int k = 0; k <x.size(); k++)
+	{
+		if(x[k] <= '9' && x[k] >= '0')
+		while (x[k] <= '9' && x[k] >= '0')//把数字存入数字字符串中
+		{
+			houzhui = houzhui + x[k];
+			k++;
+
+		}  //把连续的数字存入shuzi字符串当中
+		houzhui = houzhui + " ";//把一长串数字隔离
+
+		if (x[k] == '+' || x[k] == '-')//如果式+ 或-直接进入栈中
+		{
+			if (charb.size() == 0)//如果栈为空的话直接进栈
+			{
+				charb.push(x[k]); 
+				continue;
+			}
+			else    //如果不为零
+			{
+				while ( charb.top() == '+' || charb.top() == '-' || charb.top() == '*' ||charb.top() == '/'&&charb.top() != '(')//判断栈中元素是不是大于+-如果大于等于直接输出，但遇到（不输出
+				{                                                                                            //并且当栈中元素等于0时结束循环
+					houzhui = houzhui + charb.top();
+					charb.pop();
+					if (charb.size() == 0)
+						break;
+				}
+				charb.push(x[k]);//上面的栈中优先级比+-大的出栈
+				continue;
+			}
+		}
+		else if (x[k] == '*' || x[k] == '/')//如果式*/有优先级的判断
+		{
+				if(charb.size()==0)//如果栈为零 压入栈中
+				{
+					charb.push(x[k]);
+					continue;
+				}
+				while ( charb.top() == '*' || charb.top() == '/')//如果栈顶元素优先级和输入一样的话把栈中元素优先级一样的弹出
+				{
+					houzhui = houzhui + charb.top();
+					charb.pop();
+					if (charb.size() == 0)
+						break;
+				}
+			charb.push(x[k]);//把元素压入栈中
+		}
+		else if (x[k] == '(')//如果x[k]是（单算直接压入栈中
+		{
+			charb.push(x[k]);
+			continue;
+		}
+		else if (x[k] == ')') //当x[k]是）时
+		{
+			while (x[k] == ')'&&charb.top() != '('&&charb.size()!=0)//如果有）查找栈中对应的（并把栈中元素弹出并且栈中元素不等于0
+			{
+				houzhui = houzhui + charb.top();
+				charb.pop();
+			}
+			charb.pop();//删除对应（
+		}
+	}
+	while (charb.size() != 0)//弹出剩余元素
+	{
+		houzhui = houzhui + charb.top();
+		charb.pop();
+	}	
+	return houzhui;
+}
+
+int sum(string str) {
+	stack<int> num;
+	string sum = "";
+	for (int i = 0; i<str.size(); ++i) 
+	{
+
+		while (str[i] != '*'&&str[i] != '/'&&
+			str[i] != '+'&&str[i] != '-'&&
+			str[i] != ' ')
+		{
+			sum = sum + str[i];
+			i++;
+		}
+
+		if (str[i] == '*' || str[i] == '/' ||
+			str[i] == '+' || str[i] == '-') 
+		{
+			int b = num.top();
+			num.pop();
+			int a = num.top();
+			num.pop();
+
+			if (str[i] == '*') num.push(a*b);
+			if (str[i] == '+') num.push(a + b);
+			if (str[i] == '-') num.push(a - b);
+			if (str[i] == '/') num.push(a / b);
+
+		}
+		if (sum != "") num.push(stoi(sum));//把串转化成数字
+		sum = "";
+	}
+
+	return num.top();
+}
+
+int main()
+{
+	string a;
+	string b;
+	cout << "请输入表达式" << endl;
+	cin >> a;
+	b=houzhuibiaodashi(a);
+	cout << endl;
+	cout << b<<endl;
+	cout << sum(b)<<endl;
+	system("pause");
+	return 0;
+}
