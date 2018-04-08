@@ -1,0 +1,264 @@
+#include <iostream>
+#include <stack>
+#include <string>
+
+using namespace std;
+
+class calculator
+{
+public:
+
+	void input();
+	void output();
+
+	bool compare(char a, char b);
+	bool Digit(char c);
+	bool Sign(char c);
+
+	void change(char str[], int n);
+	void calculate();
+	
+
+private:
+
+	char str[20];
+	char d[20];
+	int i;
+	int m = 0;
+};
+
+bool calculator::compare(char a, char b)
+{
+	if ((a == '+' || a == '-') && (b == '*' || b == '/'))
+		return true;
+	else
+		return false;
+}
+
+bool calculator::Digit(char c)
+{
+	if (c >= '0'&&c <= '9')
+		return true;
+	else
+		return false;
+}
+
+bool calculator::Sign(char c)
+{
+	if (c == '(' || c == ')' || c == '+' || c == '-' || c == '*' || c == '/')
+		return true;
+	else
+		return false;
+}
+
+void calculator::change(char str[], int n)
+{
+	int i;
+
+	stack<char> signStack;
+
+	for (i = 0; i<n; i++)
+	{
+		if (Digit(str[i]))
+		{
+			d[m] = str[i];
+			m++;
+			if (Sign(str[i + 1]))
+			{
+				d[m] = '|';
+				m++;
+			}
+
+		}
+
+		else if (Sign(str[i]))
+		{
+			if (str[i] == '(' || signStack.empty())
+				signStack.push(str[i]);
+			else if (str[i] == ')')
+			{
+				char t;
+				t = signStack.top();
+				signStack.pop();
+				while (t!= '(')
+				{
+					d[m] = t;
+					t = signStack.top();
+					signStack.pop();
+					m++;
+				}
+			}
+			else
+			{
+				char t;
+				t = signStack.top();
+				if (t == '(')
+					signStack.push(str[i]);
+				else
+				{
+					if (compare(t, str[i]))
+						signStack.push(str[i]);
+					else
+					{
+						d[m] = t;
+						signStack.pop();
+						i--;
+						m++;
+					}
+				}
+			}
+		}
+	}
+
+	while (!signStack.empty())
+	{
+		d[m] = signStack.top();
+		signStack.pop();
+		m++;
+	}
+	cout << endl;
+}
+
+void calculator::calculate()
+{
+	stack<int> digitalsign;
+
+	int sum[10] = { 0 };
+	int i = 0, h, f = 0;
+	int real ;
+
+
+
+	for (i = 0; i< m;)
+	{
+		if (Digit(d[i]) == true)
+		{
+			h = 0;
+			real = 0;
+
+			while (d[i] != '|'&& Sign(d[i]) == false)
+			{
+				sum[h] = d[i] - 48;
+				h++;
+				i++;
+
+			}
+			int k = h - 1;
+
+			for (int j = 0; j < h; j++, k--)
+			{
+				real+= (sum[j] * pow(10, k));
+			}
+			
+
+			digitalsign.push(real);
+
+		}
+		else if (Sign(d[i]) == true )
+		{
+			int left = 0, right = 0, s = 0;
+
+			right = digitalsign.top();
+
+			digitalsign.pop();
+
+			left = digitalsign.top();
+
+			digitalsign.pop();
+
+			if (d[i] == '+')
+			{
+				s = left + right;
+
+				digitalsign.push(s);
+
+				cout << "++" << digitalsign.top() << endl;
+				
+			}
+			else if (d[i] == '-')
+			{
+				s = left - right;
+
+				digitalsign.push(s);
+
+				cout << "--" << digitalsign.top() << endl;
+			}
+			else if (d[i] == '*')
+			{
+				s = left * right;
+
+				digitalsign.push(s);
+
+				cout << "**" << digitalsign.top() << endl;
+			}
+			else if (d[i] == '/')
+			{
+				s = left / right;
+
+				digitalsign.push(s);
+
+				cout << "//" << digitalsign.top() << endl;
+			}
+			i++;
+		}
+		else if (d[i] == '|')
+		{
+			i++;
+		}
+
+
+	}
+
+	f = digitalsign.top();
+
+	
+	cout <<endl<< "最终结果"<<f<<endl;
+
+
+
+}
+
+
+
+
+void calculator::input()
+{
+	int i = 0;
+	cout << "输入等号结束"<<endl;
+	do
+	{
+		cin >> str[i];
+		i++;
+	} while (str[i - 1] != '=');
+
+	change(str, i - 1);
+
+
+}
+
+void calculator::output()
+{
+	int k;
+
+	
+	for (k = 0; k < m; k++)
+	{
+		cout << d[k];
+	}
+	cout << endl<<endl;
+}
+
+
+int main()
+{
+	calculator c;
+
+	c.input();
+
+	c.output();
+	
+	c.calculate();
+
+	system("pause");
+	return 0;
+}
