@@ -1,0 +1,111 @@
+#include "stdafx.h"
+#include<iostream>
+#include<stack>
+#include<string>
+using namespace std;
+//测试1+2*3+(4*5+6)*7
+stack<int>  num;
+stack<char> sign;
+string houzhui(string str) {
+	string ans = "";
+	for (int i = 0; i<str.size(); ++i) {
+		ans = ans + " ";
+		while (str[i] <= '9'&&str[i] >= '0')
+		{
+			ans = ans + str[i];
+			i++;
+		}
+		ans = ans + " ";//使用空格，输入一个大位数
+		if (str[i] == '+' || str[i] == '-')//加,减的优先级最低
+		
+		{
+			if (sign.size() == 0) 
+			{
+				sign.push(str[i]);
+				continue;
+			}
+			while (sign.size() != 0 && sign.top() != '(')
+			{
+				ans = ans + sign.top();
+				sign.pop();
+			}
+			sign.push(str[i]);
+		}
+		else if (str[i] == '*' || str[i] == '/') 
+		{
+			if (sign.size() == 0)
+			{
+				sign.push(str[i]);
+				continue;
+			}
+			if(sign.top() == '*' || sign.top() == '/')//栈顶元素不比当前字符
+			{
+				ans = ans + sign.top();
+				sign.pop();
+			}
+			    
+		         //其他种情况，直接压入栈中  
+				sign.push(str[i]);
+			
+		}
+		else if (str[i] == '(')    sign.push(str[i]);//'('直接入栈
+		else if (str[i] == ')')//此情况将符号栈中的元素依次出栈并输出，直到'(','('只出栈，不输出。。
+		{
+			while (sign.top() != '(') 
+			{
+				ans = ans + sign.top();
+				sign.pop();
+			}
+			sign.pop();
+		}
+	}
+
+	while (sign.size() != 0) 
+	{
+		ans = ans + sign.top();
+		sign.pop();
+	}
+	return ans;
+}
+
+int sum(string str) {
+	stack<int> num;
+	string sum = "";
+	for (int i = 0; i<str.size(); ++i) {
+
+		while (str[i] != '*'&&str[i] != '/'&&
+			str[i] != '+'&&str[i] != '-'&&
+			str[i] != ' ')
+		{
+			sum = sum + str[i];
+			i++;
+		}
+
+		if (str[i] == '*' || str[i] == '/' ||
+			str[i] == '+' || str[i] == '-') 
+		{
+			int b = num.top();
+			num.pop();
+			int a = num.top();
+			num.pop();
+
+			if (str[i] == '*') num.push(a*b);
+			if (str[i] == '+') num.push(a + b);
+			if (str[i] == '-') num.push(a - b);
+			if (str[i] == '/') num.push(a / b);
+
+		}//将栈的顶部前两个元素运算之后再压入栈中。。。
+		if (sum != "") num.push(stoi(sum));//利用stoi()函数将字符串中的数字字符转化为int型存入栈中
+		sum = "";//转完之后，将字符串置空
+	}
+
+	return num.top();
+}//总结：可以利用空格并使用stoi（）函数使用大位数+-*/
+int main()
+{
+	string str;
+	cout << "请输入一个正确的表达式：";
+	cin >> str;
+	cout << sum(houzhui(str));
+	system("pause");
+}
