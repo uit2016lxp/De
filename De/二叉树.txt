@@ -1,0 +1,132 @@
+#include<iostream>
+#include<stdio.h>
+#include<windows.h>
+#include<stack>
+#include<queue>
+using namespace std;
+
+typedef struct  Tree//定义二叉树类型
+{
+	char a;
+	struct Tree *lchild;//左子树
+	struct Tree *rchild; //又子树
+}*tree;
+
+
+
+tree create()
+{
+	char a;
+	tree newTree = NULL;//新树节点置零
+
+	cin >> a;
+	if (a == '*')
+	{
+		newTree = NULL;//如果遇到*号节点置零
+	}
+	else//如果节点不是*号
+	{
+		newTree = (tree)malloc(sizeof(Tree));//动态内存分配
+		if (newTree == NULL)
+		{
+			exit(0);
+		}
+		newTree->a = a;//赋值
+		newTree->lchild = create();//遍历左子树
+		newTree->rchild = create();//遍历右子树
+	}
+	return newTree;
+}
+
+int qianxubianli(tree inroot)//前序遍历
+{
+	if (inroot)
+	{
+		cout << inroot->a;
+		qianxubianli(inroot->lchild);
+		qianxubianli(inroot->rchild);
+	}
+	return 0;
+}
+
+int zhongxubianli(tree onroot)//中序遍历
+{
+	if (onroot)
+	{
+		
+		zhongxubianli(onroot->lchild);
+		cout << onroot->a;
+		zhongxubianli(onroot->rchild);
+	}
+	return 0;
+}
+
+
+int houxubianli(tree outroot)//末尾遍历
+{
+	if (outroot)
+	{
+		
+		houxubianli(outroot->lchild);
+		houxubianli(outroot->rchild);
+		cout << outroot->a;
+	}
+	return 0;
+}
+
+void InOrderTraverse(tree T)//非递归中序遍历  
+{
+
+		stack<tree> Stack;
+		if (!T)
+	{
+       printf("空树！\n");
+       return;
+	}
+
+     while (T || !Stack.empty())
+	{
+		//先入栈：若T为空也即不能入栈时则执行下面的出栈操作
+        while (T)
+		{
+            Stack.push(T);
+          T = T->lchild;
+		}
+		//出栈：需判定出栈或标记  
+        T = Stack.top();
+        Stack.pop();
+       cout<<T->a;
+						//起到链接作用
+       T = T->rchild;
+	}
+
+}
+
+
+
+
+int main()
+{
+	MessageBoxA(0, "二叉树", "欢迎浏览：", 0);//信息框
+	Beep(10000, 100000);
+	tree psroot;
+	//构造二叉树
+	psroot = create();
+	cout << "前序遍历" << endl;
+	Sleep(2000);
+	qianxubianli(psroot);//前序遍历
+	cout << endl;
+	cout << "中序遍历" << endl;
+	Sleep(2000);
+	zhongxubianli(psroot);
+	cout << endl;
+	cout << "后序遍历" << endl;
+	Sleep(2000);
+	houxubianli(psroot);
+	cout << endl;
+	cout << "非递归中序遍历" << endl;
+	InOrderTraverse(psroot);
+	system("pause");
+	Sleep(2000);
+	return 0;
+}
