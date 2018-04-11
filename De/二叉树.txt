@@ -1,0 +1,150 @@
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+typedef struct Node
+{
+	char data;
+	struct Node* Lchild;
+	struct Node* Rchild;
+}ErNode, *Erchatree;
+Erchatree jianli() {
+	char ch;
+	Erchatree T;
+	cin>>ch;
+	if (ch == '#')
+	{
+		T = NULL;
+		return T;
+	}
+	else                        
+	{
+		T = (Erchatree)malloc(sizeof(ErNode));
+		T->data = ch;
+		T->Lchild = jianli();
+		T->Rchild = jianli();
+
+	}
+	return T;
+}
+//递归，先序遍历二叉树
+void xian(Erchatree T)
+{
+	if (T)
+	{
+		printf("%c", T->data);
+		xian(T->Lchild);
+		xian(T->Rchild);
+	}
+}
+//递归，中序遍历二叉树
+void zhong(Erchatree T)
+{
+	if (T)
+	{
+		zhong(T->Lchild);
+		printf("%c", T->data);
+		zhong(T->Rchild);
+	}
+}
+//递归，后序遍历二叉树
+void hou(Erchatree T)
+{
+	if (T)
+	{
+		hou(T->Lchild);
+		hou(T->Rchild);
+		printf("%c", T->data);
+	}
+}
+
+//非递归，先序遍历二叉树
+void fxian(Erchatree T)
+{
+	Erchatree a[20];
+	int top = 0;
+	while (T || top != 0)
+	{
+		while (T)
+		{
+			a[top++] = T;
+			cout << T->data;
+			T = T->Lchild;
+		}
+		T = a[--top];
+		T = T->Rchild;
+	}
+}
+
+//非递归，中序遍历二叉树
+void fzhong(Erchatree T)
+{
+	Erchatree a[20];
+	int top = 0;
+	while (T || top != 0)
+	{
+		while (T)
+		{
+			a[top++] = T;
+			T = T->Lchild;
+		}
+		T = a[--top];
+		cout << T->data;
+		T = T->Rchild;
+	}
+}
+
+//非递归，后序遍历二叉树
+void fhou(Erchatree T)
+{
+	Erchatree a[20];
+	int top = 0;
+	while (T || top != 0)
+	{
+		while (T)
+		{
+			a[top++] = T;
+			T = T->Lchild;
+		}
+		T = a[--top];
+		cout << T->data;
+		T = T->Rchild;
+		
+	}
+}
+void find(Erchatree T,char a)
+{
+	if (T)
+	{
+		if (a == T->data)
+			cout << a;
+		find(T->Lchild,a);
+		find(T->Rchild,a);
+	}
+	
+}
+int main()
+{
+	char a;
+	Erchatree T;
+	printf("输入n个数后再输入n+1个‘#’\n");
+	T = jianli();
+	printf("递归先序遍历二叉树\n");
+	xian(T);
+	printf("\n递归中序遍历二叉树\n");
+	zhong(T);
+	printf("\n递归后序遍历二叉树\n");
+	hou(T);
+	printf("\n非递归先序遍历二叉树\n");
+	fxian(T);
+	printf("\n非递归中序遍历二叉树\n");
+	fzhong(T);
+	printf("\n非递归后序遍历二叉树\n");
+	fhou(T);
+	printf("\n");
+	printf("输入想查找的数");
+	cin>>a;
+	find(T,a);
+	printf("\n");
+	system("pause");
+	return 0;
+}
