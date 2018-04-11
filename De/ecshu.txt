@@ -1,0 +1,149 @@
+// ConsoleApplication21.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include "stdafx.h"
+
+#include<stack>
+#include"iostream"
+#include"stdlib.h"
+using namespace std;
+//二叉数的二叉链表结构，也就是二叉树的存储结构，1个数据域，2个指针域(分别指向两个孩子）
+typedef struct BiTNode
+{
+	char data;
+	struct BiTNode *lchild, *rchild;
+}BiTNode, *BiTree;
+//二叉树的建立，按前序遍历的方法建立二叉树，当然也可以以中序和后序的方法建立二叉树
+BiTree CreateBiTree()
+{
+	char data;
+	BiTree T;
+	cin >> data;
+	if (data == '#')
+	{
+		T = NULL;
+		return T;
+	}
+	else
+	{
+		T = (BiTree)malloc(sizeof(BiTNode));
+		T->data = data;
+		T->lchild = CreateBiTree();//构造左子数
+		T->rchild = CreateBiTree();//构造右子数
+	}
+	return T;
+
+
+}
+//输出
+
+//前序遍历递归
+void PreOrder(BiTree T)
+{
+	if (T != NULL)
+	{
+		//访问根节点
+		cout << T->data;
+		//访问左子节点
+		PreOrder(T->lchild);
+		//访问右子节点
+		PreOrder(T->rchild);
+	}
+}
+//前序遍历非递归
+void PreOrder2(BiTree T)
+
+{
+	if (T == NULL)
+		return;
+	stack<BiTree> tree;
+	BiTree p = T;
+	tree.push(p);
+
+	while (!tree.empty())
+	{
+		BiTree temp = tree.top();
+		cout << temp->data;
+		tree.pop();
+		if (temp->rchild)
+		{
+			tree.push(temp->rchild);
+		}
+		if (temp->lchild)
+		{
+			tree.push(temp->lchild);
+		}
+	}
+}
+	//中序遍历递归
+	void InOrder(BiTree T)
+	{
+		if (T != NULL)
+		{
+			//访问左子结点
+			InOrder(T->lchild);
+			//访问根结点
+			cout << T->data;
+			//访问右结点
+			InOrder(T->rchild);
+		}
+	}
+	//中序遍历非递归
+	void InOrder2(BiTree T)
+	{
+		stack<BiTree>tree;
+		BiTree p = T;
+		while (p || !tree.empty())
+		{
+			if (p != NULL)
+			{
+				tree.push(p);
+				p = p->lchild;
+			}
+			else
+			{
+				p = tree.top();
+				cout << p->data;
+				tree.pop();
+				p = p->rchild;
+			}
+
+		}
+	}
+	//后序遍历递归
+	void PostOrder(BiTree T)
+	{
+		if (T != NULL)
+		{
+			//访问左子结点
+			PostOrder(T->lchild);
+			//访问右子结点
+			PostOrder(T->rchild);
+			//访问根结点
+			cout << T->data;
+		}
+	}
+	int main()
+	{
+		BiTree T;
+		T = CreateBiTree();
+		cout << "先序递归遍历:";
+		PreOrder(T);
+		cout << endl;
+		cout << "先序非递归遍历:";
+		PreOrder2(T);
+
+		cout << endl;
+		cout << "中序递归遍历：";
+		InOrder(T);
+		cout << endl;
+		cout << "中序非递归遍历：";
+		InOrder2(T);
+		cout << endl;
+		cout << "后序递归遍历:";
+		PostOrder(T);
+		cout << endl;
+		system("pause");
+		return 0;
+	}
