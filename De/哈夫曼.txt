@@ -1,0 +1,122 @@
+#include<stdio.h>
+#include<iostream>
+using namespace std;
+
+typedef int renyileixing;//类型定义
+
+typedef struct tree
+{
+	renyileixing  data;//用于存入数据
+	struct tree *left; //左子树
+	struct tree *right;//右子树
+}*Tree;
+
+void paixu(Tree a[], int c)
+{
+	for(int k=0;k<c;k++)
+		for (int j = 0; j <= k; j++)
+		{
+			if (a[j]->data > a[j + 1]->data)
+			{
+				Tree temp = a[j];
+				a[j ] = a[j+1];
+				a[j + 1] = temp;
+			}
+		}
+}
+
+Tree shuchu(int a[],int c)//构建哈夫曼树
+{
+	Tree str;
+	Tree b[30];
+	for (int z = 0; z < c; z++)
+	{
+		str = (Tree)malloc(sizeof(tree));
+		str->data = a[z];
+		str->left = str->right = NULL;
+		b[z] = str;
+	}
+	for (int k = 0; k < c - 1; k++)
+	{
+		paixu(b, c);
+		str = (Tree)malloc(sizeof(tree));
+		str->data = b[k]->data + b[k + 1]->data;
+		str->left = b[k];
+		str->right = b[k + 1];
+		b[k + 1] = str;
+	}
+	
+	return str;
+	free(b);
+}
+
+void  dayinhafumanshu(Tree t,int z)//求哈夫曼树的路径
+{
+	static int a[20];//静态变量用于输出路径，当下次循环时静态变量里的值不变
+	if (t != NULL)//递归的结束语句
+	{
+		if (t->left == NULL&&t->right == NULL)//如果左右指针都为零的话是叶子
+		{
+			cout << t->data << endl;
+			for (int k = 0; k < z; k++)
+				cout << a[k];
+			cout << endl;
+		}
+		else
+		{
+			a[z] = 0;//左子树用0表示
+			dayinhafumanshu(t->left, z + 1);//左边遍历
+			a[z] = 1;//又子树用1表示
+			dayinhafumanshu(t->right, z + 1);//又子树遍历
+		}
+	}
+}
+
+void qianxubianli(Tree t)//前序遍历
+{
+	if (t)
+	{
+		cout << t->data<<" ";
+		qianxubianli(t->left);
+		qianxubianli(t->right);
+	}
+}
+
+void zhongxubianli(Tree t)//中序遍历
+{
+	if (t)
+	{
+		
+		zhongxubianli(t->left);
+		cout << t->data<<" ";
+		zhongxubianli(t->right);
+	}
+}
+
+void houxubianli(Tree t)//后序遍历
+{
+	if (t)
+	{
+		
+		houxubianli(t->left);
+		houxubianli(t->right);
+		cout << t->data<<" ";
+	}
+}
+
+int main()
+{
+	Tree L;
+	int a[5] = {3,5,7,6};
+	L=shuchu(a, 4);
+	dayinhafumanshu(L, 0);
+	cout << "前序遍历" << endl;
+	qianxubianli(L);
+	cout << "中序遍历" << endl;
+	zhongxubianli(L);
+	cout << "后续遍历" << endl;
+	houxubianli(L);
+	system("pause");
+	return 0;
+	
+}
