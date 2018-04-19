@@ -1,0 +1,89 @@
+// hafuman.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"iostream"
+using namespace std;
+
+typedef struct tree
+{
+	int data;
+	struct tree *left;
+	struct tree *right;
+}*hafumantree,tree;
+
+void paixu(hafumantree a[], int n)
+{
+	int i,j;
+	for (i = 0; i < n-1; i++)
+	{
+		for (j = 0; j < n - i - 1; j++)
+		{
+			if (a[j]->data<=a[j + 1]->data)
+			{
+				hafumantree temp = a[j];
+				a[j] = a[j + 1];
+				a[j + 1] = temp;
+			}
+		}
+	}
+}
+void qianxubianli(hafumantree T)
+{
+	if (T)
+	{
+		cout << T->data<<endl;
+		qianxubianli(T->left);
+		qianxubianli(T->right);
+	}
+
+
+}
+hafumantree shuchuan(int a[], int n)
+{
+	int i, k, u;
+	hafumantree str;
+	hafumantree b[30];
+	for (i = 0; i < n; i++)
+	{
+		str = (hafumantree)malloc(sizeof(tree));
+		str->data = a[i];
+		str->left = NULL;
+		str->right = NULL;
+		b[i] = str;
+	}
+	k = n;
+	u = n;
+	for (i = 0; i < n - 1; i++)
+	{
+		
+		
+		paixu(b, k);
+		
+		str = (hafumantree)malloc(sizeof(tree));
+		str->data = b[u - 2]->data + b[u - 1]->data;
+		str->left = b[u - 2];
+		str->right = b[u - 1];
+		b[u - 2] = str;
+		k--;
+		u--;
+
+	}
+	return str;
+}
+
+
+int main()
+{
+	hafumantree T;
+	
+	int a[5] = { 1,7,2,3,5 };
+	T = shuchuan(a, 5);
+	cout << "前序遍历:" << endl;
+	qianxubianli(T);
+	system("pause");
+
+
+    return 0;
+}
+
