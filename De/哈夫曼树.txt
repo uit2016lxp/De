@@ -1,0 +1,82 @@
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+
+typedef struct node
+{
+	int data;//结点数据
+	struct node *lchild, *rchild;//哈夫曼树的左右孩子指针
+}BSTree,*hafuman;
+
+hafuman* paixu(hafuman a[],int i)
+{
+	int j,n;
+	hafuman k;
+    for(j=0;j<i-1;j++)
+		for (n = 0; n < i - j-1; n++)
+		{
+			if (a[n]->data <=a[n+1]->data)
+			{
+				k = a[n];
+				a[n]= a[n+1];
+				a[n+1] = k;
+			}
+		}
+	return a;
+}
+void bianli(hafuman T)
+{
+	if (T)
+	{
+		printf("%d ", T->data);
+		bianli(T->lchild);
+		bianli(T->rchild);
+	}
+}
+void jiehe(hafuman a[],int i)
+{
+	int j;
+	int u = i;
+	a = paixu(a, u);
+	for (j = 0; j < i - 1; j++)
+	{
+		
+		hafuman h = (hafuman)malloc(sizeof(BSTree));
+		int j = a[u - 2]->data;
+		int k = a[u - 1]->data;
+		h->data = k + j;
+		h->lchild = a[u - 2];
+		h->rchild = a[u - 1];
+		a[u - 2] = h;
+		u--;
+		a=paixu(a, u);
+	}
+	bianli(*a);
+}
+void chushi(int b[], int i)
+{
+	hafuman a[100];
+	int j ,k;
+	for (j=0; j < i; j++)
+	{
+		a[j] = (hafuman)malloc(sizeof(BSTree));
+		a[j]->data = b[j];
+		a[j]->lchild = NULL;
+		a[j]->rchild = NULL;
+	}
+	jiehe(a, i);
+}
+int main()
+{
+	printf("请输入数字，当输入0将结束输入：");
+	int a[100], i = 0,j;
+	cin >> a[0];
+	while (a[i] != 0)
+	{
+		i++;
+		cin >> a[i];
+	}
+	chushi(a, i);
+	system("pause");
+	return 0;
+}
